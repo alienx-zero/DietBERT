@@ -1,57 +1,54 @@
-DietBERT
+# DietBERT
 
-Official implementation of DietBERT, a multimodal transformer framework that learns dietary representations from free-text diet logs and structured nutrient records to predict immune, metabolic, cognitive, and mental health outcomes.
+Official implementation of **DietBERT**, a multimodal transformer framework that learns dietary representations from free-text diet logs and structured nutrient records to predict immune, metabolic, cognitive, and mental health outcomes.
 
 This repository contains code for:
 
-multimodal diet representation learning
+- multimodal diet representation learning
+- self-supervised pretraining
+- downstream prediction tasks
+- cross-cohort evaluation
 
-self-supervised pretraining
 
-downstream prediction tasks
-
-cross-cohort evaluation
-
-Overview
+## Overview
 
 DietBERT integrates two complementary dietary data modalities:
 
-Daily diet logs (free text)
-
-Structured nutrient variables
+1. **Daily diet logs (free text)**
+2. **Structured nutrient variables**
 
 Both modalities are transformed into unified natural-language representations and encoded using pretrained transformer models. Cross-modal fusion enables the model to learn latent dietary patterns associated with biological and behavioral phenotypes.
 
 The model is evaluated across multiple cohorts including:
 
-NHANES
+- NHANES
+- UCLA-omics
+- AI4Food
 
-UCLA-omics
 
-AI4Food
-
-Model Architecture
+## Model Architecture
 
 DietBERT consists of three main components:
 
-Diet log encoder
-Encodes free-text daily diet logs using a pretrained DistilBERT backbone.
+1. **Diet log encoder**  
+   Encodes free-text daily diet logs using a pretrained DistilBERT backbone.
 
-Nutrient encoder
-Converts structured nutrient variables into natural-language descriptions and encodes them with a transformer model.
+2. **Nutrient encoder**  
+   Converts structured nutrient variables into natural-language descriptions and encodes them with a transformer model.
 
-Cross-modal fusion module
-Combines diet-log and nutrient embeddings using a FiLM-attention mechanism to capture interactions between dietary behavior and nutrient composition.
+3. **Cross-modal fusion module**  
+   Combines diet-log and nutrient embeddings using a FiLM-attention mechanism to capture interactions between dietary behavior and nutrient composition.
 
 The model is trained using a combination of:
 
-contrastive learning
+- contrastive learning
+- masked language modeling
+- supervised regression tasks
 
-masked language modeling
 
-supervised regression tasks
+## Repository Structure
 
-Repository Structure
+```
 DietBERT/
 │
 ├── data/
@@ -89,131 +86,158 @@ DietBERT/
 ├── requirements.txt
 ├── train.sh
 ├── README.md
-Installation
+```
+
+
+## Installation
 
 Clone the repository:
 
+```bash
 git clone https://github.com/yourusername/DietBERT.git
 cd DietBERT
+```
 
 Create environment:
 
+```bash
 conda create -n dietbert python=3.10
 conda activate dietbert
+```
 
 Install dependencies:
 
+```bash
 pip install -r requirements.txt
-Data Preparation
+```
+
+
+## Data Preparation
 
 Prepare datasets before training.
 
 Example directory structure:
 
+```
 data/
     NHANES/
     UCLA_omics/
     AI4Food/
+```
 
 Run preprocessing:
 
+```bash
 python utils/preprocessing.py
+```
 
 This step:
 
-formats diet logs
+- formats diet logs
+- converts nutrient tables into text
+- prepares training datasets
 
-converts nutrient tables into text
 
-prepares training datasets
-
-Pretraining
+## Pretraining
 
 Self-supervised pretraining learns general dietary representations.
 
 Run:
 
+```bash
 python training/pretrain.py \
     --config configs/pretrain.yaml
+```
 
 Training objectives include:
 
-contrastive learning between augmented diet logs
+- contrastive learning between augmented diet logs
+- masked language modeling on nutrient descriptions
 
-masked language modeling on nutrient descriptions
 
-Fine-tuning
+## Fine-tuning
 
 Fine-tune the pretrained model for specific prediction tasks.
 
 Example:
 
+```bash
 python training/finetune.py \
     --task depression \
     --dataset NHANES
+```
 
 Supported prediction tasks include:
 
-depression
+- depression
+- anxiety
+- cognitive performance
+- inflammatory biomarkers
+- metabolic measures
 
-anxiety
 
-cognitive performance
-
-inflammatory biomarkers
-
-metabolic measures
-
-Evaluation
+## Evaluation
 
 Evaluate model performance using:
 
-R²
-
-Pearson correlation
+- R²
+- Pearson correlation
 
 Example:
 
+```bash
 python evaluation/evaluate.py
-Interpretability Analysis
+```
+
+
+## Interpretability Analysis
 
 DietBERT embeddings can be interpreted using Partial Least Squares (PLS) regression to identify nutrient axes associated with predicted outcomes.
 
 Run:
 
+```bash
 python evaluation/interpretability.py
-Example Results
+```
+
+
+## Example Results
 
 DietBERT demonstrates improved predictive performance compared with classical regression baselines across multiple cohorts.
 
 Example performance (NHANES):
 
-Outcome	R²
-Depression	0.17
-Anxiety	0.19
-CRP	0.20
-Fasting Glucose	0.32
-Citation
+| Outcome | R² |
+|--------|----|
+| Depression | 0.17 |
+| Anxiety | 0.19 |
+| CRP | 0.20 |
+| Fasting Glucose | 0.32 |
+
+
+## Citation
 
 If you use this code, please cite:
 
+```
 Zhao Z. et al.
 
-DietBERT: A multimodal transformer framework linking real-world dietary behavior to immune, metabolic, and mental phenotypes.
+DietBERT: A multimodal transformer framework linking real-world dietary behavior
+to immune, metabolic, and mental phenotypes.
+```
 
-(Under review)
-License
+
+## License
 
 This project is released under the MIT License.
 
-Acknowledgements
+
+## Acknowledgements
 
 This work uses data from:
 
-NHANES
-
-UCLA-omics
-
-AI4Food
+- NHANES
+- UCLA-omics
+- AI4Food
 
 We thank collaborators and contributors for their support.
